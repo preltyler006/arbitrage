@@ -45,26 +45,26 @@ def calculateMoneyLineProfitV2(mt, mo, bet):
     print("Betting $" + str(bet) + " on " + team + "'s moneyline of " + moneyLine + " equals $" + str(round(profit, 2)) + " profit.") #Print profit
     return profit
 
-
-
-def reverseProfitCalculator(profit, line):
-    '''
-    returns bet needed to equal underdog bet given line and profit from favorite bet
-    '''
-    if(line[:1] == "+"):
-        return 100*(float(profit)/float(line[1:]))
-    
-    elif(line[:1] == "-"):
-        return (float(profit)*float(line[1:]))/100
     
 
 def reversePayoutCalculator(profit, line, bet):
-    if(line[:1] == "-"):
+    '''
+    Used to calculate amount needed to bet on a line to equal the payout of the first bet
+    ex: 
+
+    Bills: -300 to win
+    $322.50 bet = $430 payout 
+
+    Jets: +330 to win
+    $100 bet = $430 payout
+
+    Both have same payout
+    '''
+    if(line[:1] == "+"):
+        return ((float(profit + bet))/((float(line[1:])/100)+1))
+    
+    elif(line[:1] == "-"):
         return ((float(profit) + bet))/((100/float(line[1:]))+1)
-
-
-
-
 
 
 
@@ -124,11 +124,9 @@ def isThereArbitrage(o1, o2): #Need combined market margin to be below 100%
 
     
     if ((impliedProb1 + impliedProb2) < 100.0):
-        print(impliedProb1 + impliedProb2)
-        return True, o1, o2
+        return True, impliedProb1 + impliedProb2
     else:
-        print(impliedProb1 + impliedProb2)
-        return False, o1, o2
+        return False, impliedProb1 + impliedProb2
     
 
 

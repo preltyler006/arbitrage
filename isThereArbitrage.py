@@ -27,7 +27,7 @@ def getMoneyLines():
 
 def calculateMoneyLineProfitV2(mt, mo, bet):
     '''
-    Function returns profit based on three parameters
+    Function returns profit based on money line and bet
     mt ex: buf
     mo ex: +120
     bet ex: 100
@@ -38,12 +38,29 @@ def calculateMoneyLineProfitV2(mt, mo, bet):
     profit = 0
 
     if (mo[:1] == "+"): #If moneyline is underdog, +
-        profit = float(float(bet)/100.0) * (float(mo[1:])) - float(bet)
+        profit = float(float(bet)/100.0) * (float(mo[1:]))
     else: #If moneyline is favorite, -
         profit = (float(100/int(mo[1:])) * float(bet))
+    
+    print("Betting $" + str(bet) + " on " + team + "'s moneyline of " + moneyLine + " equals $" + str(round(profit, 2)) + " profit.") #Print profit
+    return profit
 
-    print("Betting $" + str(bet) + " on " + team + "'s moneyline of " + str(mo) + " equals $" + str(round(profit, 2)) + " profit.") #Print profit
 
+
+def reverseProfitCalculator(profit, line):
+    '''
+    returns bet needed to equal underdog bet given line and profit from favorite bet
+    '''
+    if(line[:1] == "+"):
+        return 100*(float(profit)/float(line[1:]))
+    
+    elif(line[:1] == "-"):
+        return (float(profit)*float(line[1:]))/100
+    
+
+def reversePayoutCalculator(profit, line, bet):
+    if(line[:1] == "-"):
+        return ((float(profit) + bet))/((100/float(line[1:]))+1)
 
 
 
@@ -81,15 +98,43 @@ def calculateMoneyLineProfitV1(m1t, m1o, m2t, m2o):
     else:
         print("bad")
 
-    print("Betting $" + str(bet) + " on " + team + "'s moneyline of " + str(m1o) + " equals $" + str(round(profit, 2)) + " profit.") #Print profit
+    # print("Betting $" + str(bet) + " on " + team + "'s moneyline of " + str(m1o) + " equals $" + str(round(profit, 2)) + " profit.") #Print profit
 
 
-    def arbitrageCalculator():
-        return 0
+def isThereArbitrage(o1, o2): #Need combined market margin to be below 100%
+    '''
+    Input odds1 and odds2 as strings, ex: +130, -300
+    Returns True if arbitrage is possible, False if not
+    '''
+
+    if (o1[:1] == "+"): #underdog team 1
+        decOdds1 = (float(o1[1:])/100.0) + 1
+        impliedProb1 = (1/decOdds1) * 100.0
+    else: #favorite team 1
+        decOdds1 = (100.0/float(o1[1:])) + 1
+        impliedProb1 = (1/decOdds1) * 100.0
+
+
+    if (o2[:1] == "+"): #underdog team 2
+        decOdds2 = (float(o2[1:])/100.0) + 1
+        impliedProb2 = (1/decOdds2) * 100.0
+    else: #favorite team 2
+        decOdds2 = (100.0/float(o2[1:])) + 1
+        impliedProb2 = (1/decOdds2) * 100.0
+
+    
+    if ((impliedProb1 + impliedProb2) < 100.0):
+        print(impliedProb1 + impliedProb2)
+        return True, o1, o2
+    else:
+        print(impliedProb1 + impliedProb2)
+        return False, o1, o2
+    
 
 
 # calculateMoneyLineProfitV1(*getMoneyLines()) # Math works for this one, used as testing for V2
-calculateMoneyLineProfitV2("gsw", "-140", 100) # Input team name, line, and bet manually
-
+# calculateMoneyLineProfitV2("gsw", "-140", 100) # Input team name, line, and bet manually
+# print(isThereArbitrage("+120", "-102"))
+# print(isThereArbitrage("+120", "-230"))
 
 

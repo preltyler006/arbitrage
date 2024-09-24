@@ -1,8 +1,10 @@
 import requests
+from dotenv import load_dotenv
 import os
 
+load_dotenv()
 API_KEY = os.getenv("api_key")
-print(API_KEY)
+print(API_KEY) # Test to see api key working
 
 SPORT = 'upcoming' # use the sport_key from the /sports endpoint below, or use 'upcoming' to see the next 8 games across all sports
 

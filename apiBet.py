@@ -2,6 +2,7 @@ import requests
 import os
 
 API_KEY = os.getenv("api_key")
+print(API_KEY)
 
 SPORT = 'upcoming' # use the sport_key from the /sports endpoint below, or use 'upcoming' to see the next 8 games across all sports
 
@@ -17,7 +18,7 @@ DATE_FORMAT = 'unix' # iso | iso or unix - mm/dd/yyyy
 sports_response = requests.get(
     'https://api.the-odds-api.com/v4/sports', 
     params={
-        'api_key': '2da3a631afd1f7b9a83b4d202bb19c59'
+        'api_key': API_KEY
     }
 )
 
@@ -26,4 +27,29 @@ if sports_response.status_code != 200: # Client/Server Request error
 
 else:
     print('List of in season sports:', sports_response.json())
+
+
+odds_response = requests.get(
+    f'https://api.the-odds-api.com/v4/sports/{SPORT}/odds',
+    params={
+        'api_key': API_KEY,
+        'regions': REGIONS,
+        'markets': MARKETS,
+        'oddsFormat': ODDS_FORMAT,
+        'dateFormat': DATE_FORMAT,
+    }
+)
+
+if odds_response.status_code != 200:
+    print(f'Failed to get odds: status_code {odds_response.status_code}, response body {odds_response.text}')
+
+else:
+    odds_json = odds_response.json()
+    print('Number of events:', len(odds_json))
+    print(odds_json)
+
+    # Check the usage quota
+    print('Remaining requests', odds_response.headers['x-requests-remaining'])
+    print('Used requests', odds_response.headers['x-requests-used'])
+
 

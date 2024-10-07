@@ -45,7 +45,7 @@ def arbitrageBetCalculator(bet, o1, o2):
 
         
     else: #No valid Arbitrage
-        print(isThereArbitrage(o1, o2))
-        return "Arbitrage Not Possible"
+        # print(isThereArbitrage(o1, o2))
+        return False
 
 print("\n")

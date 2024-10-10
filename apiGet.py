@@ -17,48 +17,44 @@ MARKETS = 'h2h' # h2h moneyline | spreads points handicaps | totals over/under. 
 
 ODDS_FORMAT = 'american' # decimal | american
 
-DATE_FORMAT = 'unix' # iso | iso or unix - mm/dd/yyyy
+DATE_FORMAT = 'iso' # iso | iso - mm/dd/yyyy or unix 
 
 
-sports_response = requests.get(
-    'https://api.the-odds-api.com/v4/sports', 
-    params={
-        'api_key': API_KEY
-    }
-)
+def writeToDataFile(fileName):
+    '''
+    This function calls the sportsodds api and makes a request to get all the specified data above,
+    and writes all of this to a text file
 
-if sports_response.status_code != 200: # Client/Server Request error
-    print(f'Failed to get sports: status_code {sports_response.status_code}, response body {sports_response.text}')
+    Args:
+        fileName: The full filepath, ex: './apiCallData.txt'
+    
+    Returns:
+        None; Instead, prints a success or failure message to screen, along with number of API calls left
+    '''
 
-else:
-    # print('List of in season sports:', sports_response.json())
-    pass
+    odds_response = requests.get(
+        f'https://api.the-odds-api.com/v4/sports/{SPORT}/odds',
+        params={
+            'api_key': API_KEY,
+            'regions': REGIONS,
+            'markets': MARKETS,
+            'group' : GROUP,
+            'oddsFormat': ODDS_FORMAT,
+            'dateFormat': DATE_FORMAT,
+        }
+    )
 
+    if odds_response.status_code != 200: # If status code is not valid, usually client side if any errors
+        print(f'Failed to get odds: status_code {odds_response.status_code}, response body {odds_response.text}')
 
+    else:
+        odds_json = odds_response.json()
 
-odds_response = requests.get(
-    f'https://api.the-odds-api.com/v4/sports/{SPORT}/odds',
-    params={
-        'api_key': API_KEY,
-        'regions': REGIONS,
-        'markets': MARKETS,
-        'group' : GROUP,
-        'oddsFormat': ODDS_FORMAT,
-        'dateFormat': DATE_FORMAT,
-    }
-)
+        # Writes every line in json file to text file for later use
+        with open(fileName, 'w') as doc:
+            for line in odds_json:
+                doc.write(f"{line}\n")
 
-if odds_response.status_code != 200:
-    print(f'Failed to get odds: status_code {odds_response.status_code}, response body {odds_response.text}')
-
-else:
-    odds_json = odds_response.json()
-    # print('Number of events:', len(odds_json))
-    # print(odds_json)
-    with open('./data.txt', 'w') as doc:
-        for line in odds_json:
-            doc.write(f"{line}\n")
-
-    # Check the usage quota
-    print('Remaining requests', odds_response.headers['x-requests-remaining'])
-    print('Used requests', odds_response.headers['x-requests-used'])
+        # Check the usage quota
+        print('Remaining requests', odds_response.headers['x-requests-remaining'])
+        print('Used requests', odds_response.headers['x-requests-used'])

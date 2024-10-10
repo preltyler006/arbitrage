@@ -52,7 +52,7 @@ def line_and_team(BET):
         currentBestProfit = 0
         key = sport_game["sport_key"]
         bestProfitPerGame = "" 
-        #setting global variable for print statement
+        #setting global variables for returned print statement
 
         listOfSports = ("americanfootball_nfl", "americanfootball_ncaaf", "baseball_mlb", "icehockey_nhl", "basketball_nba_preseason")
 
@@ -73,12 +73,12 @@ def line_and_team(BET):
                 if (line1 > 0): # if odds are underdog, ex +240
                         
                     line1 = "+" + str(line1) 
-                    # add + in front of int and change type to str
-                    # to make input work with arbitrageBetCalculator() function
+                        # add + in front of int and change type to str
+                        # to make input work with arbitrageBetCalculator() function
                 else:
                     line1 = str(line1) 
-                    #can leave line1 unchanged as a string as we don't need to add a negative sign
-                    #in front like + sign because line is negative already
+                        #can leave line1 unchanged as a string as we don't need to add a negative sign
+                        #in front like + sign because line is negative already
 
 
                 for bm in bookmakers: # Looping through every other bookmaker's set of lines to compare against line1 made above
@@ -89,17 +89,16 @@ def line_and_team(BET):
                     if (line2 > 0): # if odds are underdog, ex +240
                         
                         line2 = "+" + str(line2) 
-                        # add + in front of int and change type to str
-                        # to make input work with arbitrageBetCalculator() function
+                            # add + in front of int and change type to str
+                            # to make input work with arbitrageBetCalculator() function
                     else:
                         line2 = str(line2)
-                    # print(line2)
+
 
                     arbitrage = arbitrageBetCalculator(BET, line1, line2) # calling arbitrageBetCalculator with values obtained from text file
 
                     if (arbitrage[0] == False): #If arbitrage returns only boolean, meaning false
                         pass
-                        # print("Arbitrage not possible")
                     else:
                         pass
                         arbitrageProfit = arbitrage[0] # First return value is the profit
@@ -110,7 +109,7 @@ def line_and_team(BET):
                             bestMatchup1["bookmaker"] = bookmaker1
                             bestMatchup1["name"] = team1
                             bestMatchup1["line"] = line1
-                            #so the user knows what to bet on which line
+                                #so the user knows what to bet on which line
 
                             bestMatchup2["bookmaker"] = bookmaker2
                             bestMatchup2["name"] = team2
@@ -125,6 +124,3 @@ def line_and_team(BET):
         allProfits += bestProfitPerGame
 
     return(allProfits)
-
-                           
-# line_and_team(100)

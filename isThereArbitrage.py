@@ -19,7 +19,6 @@ def calculateMoneyLineProfitV2(mt, mo, bet):
     else: #If moneyline is favorite, -
         profit = (float(100/int(mo[1:])) * float(bet))
     
-    # print("Betting $" + str(bet) + " on " + team + "'s moneyline of " + moneyLine + " equals $" + str(round(profit, 2)) + " profit.") #Print profit
     return profit
 
     

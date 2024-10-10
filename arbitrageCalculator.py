@@ -20,17 +20,12 @@ def arbitrageBetCalculator(bet, o1, o2):
         # print("Arbitrage is possible with a " + str(round((100-(isThereArbitrage(o1, o2)[1])), 2)) + "% profit margin\n")
 
         if (o1[:1] == "+" and o2[:1] == "+"): #if 1st and 2nd line are underdog
-            profitLine1 = float(calculateMoneyLineProfitV2("team", o1, bet)) 
-            #Calculates profit based on original bet for first line
+            profitLine1 = float(calculateMoneyLineProfitV2("team", o1, bet)) #Calculates profit based on original bet for first line
+            betForLine2 = round(reversePayoutCalculator(profitLine1, o2, bet), 2) #Calculates bet needed on second line to equal payout for first line
+            profitLine2 = float(calculateMoneyLineProfitV2("team", o2, betForLine2)) #Calculates profit for second line
 
-            betForLine2 = round(reversePayoutCalculator(profitLine1, o2, bet), 2) 
-            #Calculates bet needed on second line to equal payout for first line
-
-            profitLine2 = float(calculateMoneyLineProfitV2("team", o2, betForLine2)) 
-            #Calculates profit for second line
-
-            #prints for user to know what to bet where
             returnMessage = "\nBetting $" + str(bet) + " on " + o1  + " results in $" + str(profitLine1 + bet) + " payout.\n" + "Betting $" + str(betForLine2) + " on " + o2 + " results in $" + str(profitLine2 + betForLine2) + " payout.\n" + "Your guaranteed profit will be $" + str(round(((profitLine1 + bet) - (bet + betForLine2)), 2)) + "\n------------------------------------------------------------------------------" + "\n\n"
+                #prints for user to know what to bet where
             return round(((profitLine1 + bet) - (bet + betForLine2)), 2), returnMessage
         
 

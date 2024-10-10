@@ -50,11 +50,10 @@ def writeToDataFile(fileName):
     else:
         odds_json = odds_response.json()
 
-        # Writes every line in json file to text file for later use
-        with open(fileName, 'w') as doc:
+        with open(fileName, 'w') as doc: # Writes every line in json file to text file for later use
             for line in odds_json:
                 doc.write(f"{line}\n")
 
-        # Check the usage quota
         print('Remaining requests', odds_response.headers['x-requests-remaining'])
         print('Used requests', odds_response.headers['x-requests-used'])
+        # Check the usage quota
